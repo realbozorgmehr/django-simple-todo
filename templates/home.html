@@ -4,13 +4,17 @@
 {% endblock %}
 
 {% block content %}
-    {{ request.user }}
-    <div class="card">
-        <h4>{% for todo in todos %}
-            <h5><a href="{% url 'detail' todo.id %}" class="card-body"> {{ todo.title }} </a><br></h5>
-            <small><a href="{% url 'detail' todo.id %}" class="card-body"> {{ todo.created }} </a></small>
-            <hr>
-        {% endfor %}
-        </h4>
-    </div>
+    {% if user.is_authenticated %}
+        {{ request.user }}
+        <div class="card">
+            <h4>{% for todo in todos %}
+                <h5><a href="{% url 'detail' todo.id %}" class="card-body"> {{ todo.title }} </a><br></h5>
+                <small><a href="{% url 'detail' todo.id %}" class="card-body"> {{ todo.created }} </a></small>
+                <hr>
+            {% endfor %}
+            </h4>
+        </div>
+    {% else %}
+        <h4><a href="{% url 'user_login' %}"> Login </a> to create todos and enjoy  </h4>
+    {% endif %}
 {% endblock %}
