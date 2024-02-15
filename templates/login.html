@@ -9,5 +9,5 @@
         {{ form.as_p }}
         <input type="submit" value="Login">
     </form>
-    <small> you don't have account?<a href="{% url 'user_register' %}"> Create </a> one </small>
+    <small> you don't have account?<a href="{% url 'accounts:user_register' %}"> Create </a> one </small>
 {% endblock %}

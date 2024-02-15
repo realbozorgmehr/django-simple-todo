@@ -4,10 +4,10 @@
 {% endblock %}
 
 {% block content %}
-    <form action="" method="post" novalidate>
+    <form action="" method="post" novalidate class="col-md-4">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Register">
     </form>
-    <small> if you have account, <a href="{% url 'user_login' %}"> Login </a> here </small>
+    <small> if you have account, <a href="{% url 'accounts:user_login' %}"> Login </a> here </small>
 {% endblock %}

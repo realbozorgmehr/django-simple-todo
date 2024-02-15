@@ -3,22 +3,26 @@ from django.shortcuts import render, redirect
 from .forms import UserRegisterForm, UserLoginForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.views import View
 
 
 # Create your views here.
-def user_register(request):
-    if request.method == "POST":
-        form = UserRegisterForm(request.POST)
+class UserRegisterView(View):
+    form_class = UserRegisterForm
+    template_name = 'register.html'
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, context={'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            User.objects.create_user(cd['username'], cd['email'], cd['password'])
-            user = authenticate(username=cd['username'], password=cd['password'])
-            login(request, user)
-            messages.success(request, 'Account created successfully!', 'success')
-            return redirect('home')
-    else:
-        form = UserRegisterForm()
-    return render(request, 'register.html', context={'form': form})
+            User.objects.create_user(username=cd['username'], email=cd['email'], password=cd['password'])
+            messages.success(request, 'Account created successfully!', extra_tags='success')
+            return redirect('home:home')
+        return render(request, self.template_name, context={'form': form})
 
 
 def user_login(request):
@@ -30,7 +34,7 @@ def user_login(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'user logged in successfully', 'success')
-                return redirect('home')
+                return redirect('home:home')
             else:
                 messages.error(request, 'usrename or password is invalid', 'danger')
     else:
@@ -38,7 +42,8 @@ def user_login(request):
     return render(request, 'login.html', {'form': form})
 
 
-def user_logout(request):
-    logout(request)
-    messages.success(request, 'Logged out successfully!', 'success')
-    return redirect('home')
+class UserLogoutView(View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, 'logged out successfully', 'success')
+        return redirect('home:home')
