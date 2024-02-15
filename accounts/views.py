@@ -9,7 +9,7 @@ from django.views import View
 # Create your views here.
 class UserRegisterView(View):
     form_class = UserRegisterForm
-    template_name = 'register.html'
+    template_name = 'accounts/register.html'
 
     def get(self, request):
         form = self.form_class()
@@ -39,7 +39,7 @@ def user_login(request):
                 messages.error(request, 'usrename or password is invalid', 'danger')
     else:
         form = UserLoginForm()
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'accounts/login.html', {'form': form})
 
 
 class UserLogoutView(View):

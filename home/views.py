@@ -9,13 +9,13 @@ from django.views import View
 class HomeView(View):
     def get(self, request):
         todo = Todo.objects.all()
-        return render(request, 'home.html', context={'todos': todo})
+        return render(request, 'home/home.html', context={'todos': todo})
 
 
 class TodoView(View):
     def get(self, request, todo_id):
         todo = Todo.objects.get(id=todo_id)
-        return render(request, 'detail.html', context={'todo': todo})
+        return render(request, 'home/detail.html', context={'todo': todo})
 
 
 class TodoDeleteView(View):
@@ -36,7 +36,7 @@ class TodoCreateView(View):
 
     def get(self, request):
         todo = TodoCreateForm()
-        return render(request, 'create.html', context={'form': todo})
+        return render(request, 'home/create.html', context={'form': todo})
 
 
 def update(request, todo_id):
@@ -49,4 +49,4 @@ def update(request, todo_id):
             return redirect('home:detail', todo_id)
     else:
         form = TodoUpdateForm(instance=todo)
-    return render(request, 'update.html', context={'form': form})
+    return render(request, 'home/update.html', context={'form': form})
