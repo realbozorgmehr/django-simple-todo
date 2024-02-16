@@ -39,14 +39,17 @@ class TodoCreateView(View):
         return render(request, 'home/create.html', context={'form': todo})
 
 
-def update(request, todo_id):
-    todo = Todo.objects.get(id=todo_id)
-    if request.method == 'POST':
+class TodoUpdateView(View):
+    def post(self, request, todo_id):
+        todo = Todo.objects.get(id=todo_id)
         form = TodoUpdateForm(request.POST, instance=todo)
         if form.is_valid():
             form.save()
             messages.success(request, 'todo updated successfully!', 'success')
             return redirect('home:detail', todo_id)
-    else:
+        return render(request, 'home/update.html', context={'form': form})
+
+    def get(self, request, todo_id):
+        todo = Todo.objects.get(id=todo_id)
         form = TodoUpdateForm(instance=todo)
-    return render(request, 'home/update.html', context={'form': form})
+        return render(request, 'home/update.html', context={'form': form})
