@@ -4,7 +4,9 @@
 {% endblock %}
 
 {% block content %}
-    <form action="" method="post" novalidate>
+    <h2>Login</h2>
+    <hr>
+    <form action="" method="post" novalidate class="col-md-4">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Login">
