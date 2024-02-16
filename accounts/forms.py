@@ -8,6 +8,9 @@ class UserRegisterForm(forms.Form):
     email = forms.EmailField(widget=forms.EmailInput(
         attrs=({'class': 'form-control', 'placeholder': 'example@gamil.com'})))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'password'}))
+    password2 = forms.CharField(label='confirm password',
+                                widget=forms.PasswordInput(
+                                    attrs={'class': 'form-control', 'placeholder': 'reply password'}))
 
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -22,6 +25,14 @@ class UserRegisterForm(forms.Form):
         if user:
             raise ValidationError('email already exist')
         return email
+
+    def clean(self):
+        cd = super().clean()
+        p1 = cd.get('password')
+        p2 = cd.get('password2')
+
+        if p1 and p2 and p1 != p2:
+            raise ValidationError('Passwords do not match')
 
 
 class UserLoginForm(forms.Form):
