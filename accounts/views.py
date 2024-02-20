@@ -74,3 +74,7 @@ class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
         return render(request, 'accounts/profile.html', context={'user': user})
+
+    def post(self, request, user_id):
+        user = User.objects.get(pk=user_id)
+        return render(request, 'accounts/profile.html', context={'user': user})
