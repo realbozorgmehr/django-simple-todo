@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% block Title %} {{ user.username }} Profile {% endblock %}
 {% block content %}
-    <h2 class="text-center">{{ user.username }}</h2>
+    <p>Username:</p>
+    <h4>{{ user.username }}</h4>
+    <p>Date Joined:</p>
+    <h4>{{ user.date_joined }}</h4>
+    <p>Last Login:</p>
+    <h4>{{ user.last_login }}</h4>
+    <p>Email:</p>
+    <h4>{{ user.email }}</h4>
 {% endblock %}
