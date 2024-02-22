@@ -2,11 +2,21 @@
 {% block Title %} {{ user.username }} Profile {% endblock %}
 {% block content %}
     <p>Username:</p>
-    <h4>{{ user.username }}</h4>
+    <h5>{{ user.username }}</h5>
     <p>Date Joined:</p>
-    <h4>{{ user.date_joined }}</h4>
+    <h5>{{ user.date_joined }}</h5>
     <p>Last Login:</p>
-    <h4>{{ user.last_login }}</h4>
+    <h5>{{ user.last_login }}</h5>
     <p>Email:</p>
-    <h4>{{ user.email }}</h4>
+    <h5>{{ user.email }}</h5>
+    <hr>
+    <h4 class="text-center">Posts</h4>
+    <div class="card">
+        <h4>{% for todo in todos %}
+            <h5><a href="{% url 'home:detail' todo.id %}" class="card-body"> {{ todo.title }} </a><br></h5>
+            <small><a href="{% url 'home:detail' todo.id %}" class="card-body"> {{ todo.created }} </a></small>
+            <hr>
+        {% endfor %}
+        </h4>
+    </div>
 {% endblock %}
