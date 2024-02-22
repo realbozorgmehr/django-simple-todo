@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
+from home.models import Todo
 
 
 # Create your views here.
@@ -73,8 +74,6 @@ class UserLogoutView(LoginRequiredMixin, View):
 class UserProfileView(LoginRequiredMixin, View):
     def get(self, request, user_id):
         user = User.objects.get(pk=user_id)
-        return render(request, 'accounts/profile.html', context={'user': user})
+        todos = Todo.objects.filter(user=user)
+        return render(request, 'accounts/profile.html', context={'user': user, 'todos': todos})
 
-    def post(self, request, user_id):
-        user = User.objects.get(pk=user_id)
-        return render(request, 'accounts/profile.html', context={'user': user})
