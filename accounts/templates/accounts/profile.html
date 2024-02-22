@@ -11,12 +11,12 @@
     <h5>{{ user.email }}</h5>
     <hr>
     <h4 class="text-center">Posts</h4>
-    <div class="card">
-        <h4>{% for todo in todos %}
-            <h5><a href="{% url 'home:detail' todo.id %}" class="card-body"> {{ todo.title }} </a><br></h5>
-            <small><a href="{% url 'home:detail' todo.id %}" class="card-body"> {{ todo.created }} </a></small>
-            <hr>
-        {% endfor %}
-        </h4>
-    </div>
+        <div class="card">
+            <h4>{% for todo in todos %}
+                <h5><a href="{% url 'home:detail' todo.id todo.slug %}" class="card-body"> {{ todo.title }} </a><br></h5>
+                <small><a href="{% url 'home:detail' todo.id todo.slug %}" class="card-body"> {{ todo.user }}-{{ todo.created|date:"d M Y" }} </a></small>
+                <hr>
+            {% endfor %}
+            </h4>
+        </div>
 {% endblock %}

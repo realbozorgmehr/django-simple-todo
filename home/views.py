@@ -13,14 +13,14 @@ class HomeView(View):
 
 
 class TodoView(View):
-    def get(self, request, todo_id):
-        todo = Todo.objects.get(id=todo_id)
+    def get(self, request, todo_id, todo_slug):
+        todo = Todo.objects.get(id=todo_id, slug=todo_slug)
         return render(request, 'home/detail.html', context={'todo': todo})
 
 
 class TodoDeleteView(View):
-    def get(self, request, todo_id):
-        Todo.objects.get(id=todo_id).delete()
+    def get(self, request, todo_id, todo_slug):
+        Todo.objects.get(id=todo_id, slug=todo_slug).delete()
         messages.success(request, 'todo deleted successfully!', 'success')
         return redirect('home:home')
 
@@ -40,16 +40,16 @@ class TodoCreateView(View):
 
 
 class TodoUpdateView(View):
-    def post(self, request, todo_id):
-        todo = Todo.objects.get(id=todo_id)
+    def post(self, request, todo_id, todo_slug):
+        todo = Todo.objects.get(id=todo_id, slug=todo_slug)
         form = TodoUpdateForm(request.POST, instance=todo)
         if form.is_valid():
             form.save()
             messages.success(request, 'todo updated successfully!', 'success')
-            return redirect('home:detail', todo_id)
+            return redirect('home:detail', todo_id, todo_slug)
         return render(request, 'home/update.html', context={'form': form})
 
-    def get(self, request, todo_id):
-        todo = Todo.objects.get(id=todo_id)
+    def get(self, request, todo_id, todo_slug):
+        todo = Todo.objects.get(id=todo_id, slug=todo_slug)
         form = TodoUpdateForm(instance=todo)
         return render(request, 'home/update.html', context={'form': form})
