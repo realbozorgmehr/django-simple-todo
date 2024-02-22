@@ -5,7 +5,7 @@
 
 {% block content %}
     <h3> {{ todo.title }} </h3>
-    <small> {{ todo.created }} </small>
+    <small>{{ todo.user.username }} - {{ todo.updated|date:"d/M/Y" }} </small>
     <a href="{% url 'home:delete' todo.id %}" class="btn btn-danger"> Delete </a>
     <a href="{% url 'home:update' todo.id %}" class="btn btn-info"> Update </a>
     <hr>
