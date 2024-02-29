@@ -8,7 +8,7 @@
         {{ request.user }}
         <div class="card">
             <h4>{% for todo in todos %}
-                <h5><a href="{% url 'home:detail' todo.id todo.slug %}" class="card-body"> {{ todo.title }} </a><br></h5>
+                <h5><a href="{{ todo.get_absolute_url }}" class="card-body"> {{ todo.title }} </a><br></h5>
                 <small><a href="{% url 'home:detail' todo.id todo.slug %}" class="card-body"> {{ todo.user }}-{{ todo.created|date:"d M Y" }} </a></small>
                 <hr>
             {% endfor %}
