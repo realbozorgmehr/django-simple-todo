@@ -6,8 +6,11 @@
 {% block content %}
     <h3> {{ todo.title }} </h3>
     <small>{{ todo.user.username }} - {{ todo.updated|date:"d/M/Y" }} </small>
-    <a href="{% url 'home:delete' todo.id todo.slug %}" class="btn btn-danger"> Delete </a>
-    <a href="{% url 'home:update' todo.id todo.slug %}" class="btn btn-info"> Update </a>
+    {% if request.user.id == todo.user.id %}
+        <a href="{% url 'home:delete' todo.id %}" class="btn btn-danger"> Delete </a>
+        <a href="{% url 'home:update' todo.id %}" class="btn btn-info"> Update </a>
+    {% endif %}
+
     <hr>
     <p>
         {{ todo.body }}
