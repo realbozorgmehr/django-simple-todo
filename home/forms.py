@@ -13,4 +13,4 @@ class TodoCreateForm(forms.Form):
 class TodoUpdateForm(forms.ModelForm):
     class Meta:
         model = Todo
-        fields = '__all__'
+        fields = ('title', 'body')
