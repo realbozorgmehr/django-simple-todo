@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from home.models import Todo
+from django.urls import reverse_lazy
+from django.contrib.auth import views as authviews
 
 
 # Create your views here.
@@ -77,3 +79,21 @@ class UserProfileView(LoginRequiredMixin, View):
         todos = Todo.objects.filter(user=user)
         return render(request, 'accounts/profile.html', context={'user': user, 'todos': todos})
 
+
+class UserPasswordResetView(authviews.PasswordResetView):
+    template_name = 'accounts/reset-password/password_reset.html'
+    success_url = reverse_lazy('accounts:user_password_reset_done')
+    email_template_name = 'accounts/reset-password/password_reset_email.html'
+
+
+class UserPasswordResetDoneView(authviews.PasswordResetDoneView):
+    template_name = 'accounts/reset-password/password_reset_done.html'
+
+
+class UserPasswordResetConfirmView(authviews.PasswordResetConfirmView):
+    template_name = 'accounts/reset-password/password_reset_confirm.html'
+    success_url = reverse_lazy('accounts:user_password_reset_complete')
+
+
+class UserPasswordResetCompleteView(authviews.PasswordResetCompleteView):
+    template_name = 'accounts/reset-password/password_reset_complete.html'

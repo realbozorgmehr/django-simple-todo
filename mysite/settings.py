@@ -22,9 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-6$$%w-fhnl@_xe=6i2w+qyt74a3^#hbg-@95cmvm35wg6y@tq!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -126,3 +126,22 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'accounts.authenticate.EmailBackend'
 ]
+"""
+The following settings are for using email in password reset.
+If you have purchased another email server, you must have (email host, email host user, email port)
+If you use Gmail, you must enter your email address and app password
+You can get app password from the following address: --- (You must have activated the two-step verification of your Google account)
+    fill variables like this:
+    
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = 'example@gmail.com'
+    EMAIL_HOST_PASSWORD = 'gbjrdzacuxsspbom'
+    EMAIL_PORT = 587
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'bozorgmehrkameli@gmail.com'
+EMAIL_HOST_PASSWORD = 'i cant tell '
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Todo Spot'
