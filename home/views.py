@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Todo
-from .forms import TodoCreateForm, TodoUpdateForm
+from .forms import TodoCreateUpdateForm
 from django.views import View
 from django.utils.text import slugify
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 # Create your views here.
@@ -19,7 +20,7 @@ class TodoView(View):
         return render(request, 'home/detail.html', context={'todo': todo})
 
 
-class TodoDeleteView(View):
+class TodoDeleteView(LoginRequiredMixin, View):
     def get(self, request, todo_id):
         todo = Todo.objects.get(id=todo_id)
         if request.user.id == todo.user.id:
@@ -31,22 +32,26 @@ class TodoDeleteView(View):
             return redirect('home:detail', todo.id, todo.slug)
 
 
-class TodoCreateView(View):
+class TodoCreateView(LoginRequiredMixin, View):
+    form_class = TodoCreateUpdateForm
+
     def get(self, request):
-        todo = TodoCreateForm()
-        return render(request, 'home/create.html', context={'form': todo})
+        form = self.form_class()
+        return render(request, 'home/create.html', {'form': form})
 
     def post(self, request):
-        todo = TodoCreateForm(request.POST)
-        if todo.is_valid():
-            cd = todo.cleaned_data
-            Todo.objects.create(title=cd['title'], body=cd['body'], created=cd['created'])
-            messages.success(request, 'todo created successfully!', 'success')
-            return redirect('home:home')
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            new_todo = form.save(commit=False)
+            new_todo.user = request.user
+            new_todo.slug = slugify(form.cleaned_data['title'][:30])
+            new_todo.save()
+            messages.success(request, 'Todo created successfuly', extra_tags='success')
+            return redirect('home:detail', new_todo.id, new_todo.slug)
 
 
-class TodoUpdateView(View):
-    form_class = TodoUpdateForm
+class TodoUpdateView(LoginRequiredMixin, View):
+    form_class = TodoCreateUpdateForm
     template_name = 'home/update.html'
 
     def setup(self, request, *args, **kwargs):
