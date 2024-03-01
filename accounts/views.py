@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UserRegisterForm, UserLoginForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -72,8 +72,8 @@ class UserLogoutView(LoginRequiredMixin, View):
 
 
 class UserProfileView(LoginRequiredMixin, View):
-    def get(self, request, user_id):
-        user = User.objects.get(pk=user_id)
+    def get(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=kwargs['user_id'])
         todos = Todo.objects.filter(user=user)
         return render(request, 'accounts/profile.html', context={'user': user, 'todos': todos})
 

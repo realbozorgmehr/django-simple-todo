@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Todo
 from .forms import TodoCreateUpdateForm
@@ -15,14 +15,14 @@ class HomeView(View):
 
 
 class TodoView(View):
-    def get(self, request, todo_id, todo_slug):
-        todo = Todo.objects.get(id=todo_id, slug=todo_slug)
+    def get(self, request, *args, **kwargs):
+        todo = get_object_or_404(Todo, pk=kwargs['todo_id'], slug=kwargs['todo_slug'])
         return render(request, 'home/detail.html', context={'todo': todo})
 
 
 class TodoDeleteView(LoginRequiredMixin, View):
-    def get(self, request, todo_id):
-        todo = Todo.objects.get(id=todo_id)
+    def get(self, request, *args, **kwargs):
+        todo = get_object_or_404(Todo, pk=kwargs['todo_id'])
         if request.user.id == todo.user.id:
             todo.delete()
             messages.success(request, 'Deleted successfully!', extra_tags='success')
@@ -55,7 +55,7 @@ class TodoUpdateView(LoginRequiredMixin, View):
     template_name = 'home/update.html'
 
     def setup(self, request, *args, **kwargs):
-        self.todo_instance = Todo.objects.get(id=kwargs['todo_id'])
+        self.todo_instance = get_object_or_404(Todo, pk=kwargs['todo_id'])
         return super().setup(request, *args, **kwargs)
 
     def dispatch(self, request, *args, **kwargs):
@@ -71,7 +71,7 @@ class TodoUpdateView(LoginRequiredMixin, View):
         form = self.form_class(instance=todo)
         return render(request, 'home/update.html', {'form': form})
 
-    def post(self, request, todo_id):
+    def post(self, request, *args, **kwargs):
         todo = self.todo_instance
         form = self.form_class(request.POST, instance=todo)
         if form.is_valid():
